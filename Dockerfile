@@ -1,7 +1,7 @@
 FROM python:3
 
 # Set env var to allow viewing of terminal in realtime
-ENV PYTHONBUFFERED=1
+ENV PYTHONUNBUFFERED=1
 
 WORKDIR /usr/src/app
 

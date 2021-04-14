@@ -9,8 +9,22 @@ services:
       - "8000:8000"
     volumes: 
       - .:/usr/src/app
+    environment: 
+      - DEBUG=1
+      - CELERY_BROKER=redis://redis:6379/0
+      - CELERY_BACKEND=redis://redis:6379/0
     depends_on: 
       - pgdb
+      - redis
+
+  celery:
+    build: .
+    command: celery -A core worker -l INFO
+    volumes: 
+      - .:/usr/src/app
+    depends_on: 
+      - django
+      - redis
   
   pgdb:
     image: postgres
@@ -21,6 +35,9 @@ services:
       - POSTGRES_DB=postgres
     volumes: 
       - pgdata:/var/lib/postgresql/data/
+
+  redis:
+    image: redis
 
 volumes: 
   pgdata:
